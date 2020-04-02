@@ -25,27 +25,32 @@ public class Bird {
 
     private int birdTextureState = 0;
     private int textureChangeDelay = 0;
-    private float velocity = 0;
+    private float velocity;
+    private float flyingAngle;
 
     public Bird(int screenHeight, int screenWidth) {
         this.screenHeight = screenHeight;
         this.screenWidth = screenWidth;
 
-        this.xPos = screenWidth / 2.0f - BIRD_WIDTH;
-        this.yPos = screenHeight / 2.0f - BIRD_HEIGHT;
+        this.xPos = screenWidth / 2.5f;
         this.activeTexture = TEXTURES[birdTextureState];
+        resetState();
     }
 
     public void move() {
 
         velocity += GRAVITY;  // increase bird's velocity
         yPos -= velocity;  // change bird's y position
+        flyingAngle -= 1.0f;
 
-        if (hitsEnd()) yPos = 0;
+        if (flyingAngle <= -90.0f) flyingAngle = -90.0f;
+
+        if (hitsEnd()) resetState();
     }
 
     public void flyUp() {
         velocity = UPWARD_VELOCITY;
+        flyingAngle = 20.0f;
     }
 
     public void toggleTexture() {
@@ -73,7 +78,24 @@ public class Bird {
     }
 
     public boolean hitsEnd() {
-        return yPos <= 0;
+        return yPos <= BIRD_HEIGHT;
     }
 
+    public float getFlyingAngle() {
+        return flyingAngle;
+    }
+
+    public static int getWidth() {
+        return BIRD_WIDTH;
+    }
+
+    public static int getHeight() {
+        return BIRD_HEIGHT;
+    }
+
+    private void resetState() {
+        this.yPos = screenHeight / 2.0f;
+        this.velocity = 0.0f;
+        this.flyingAngle = 0.0f;
+    }
 }

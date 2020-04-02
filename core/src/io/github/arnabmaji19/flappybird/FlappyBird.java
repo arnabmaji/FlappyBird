@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.github.arnabmaji19.flappybird.model.Bird;
 
 public class FlappyBird extends ApplicationAdapter {
@@ -39,8 +40,11 @@ public class FlappyBird extends ApplicationAdapter {
         // bird configurations
         bird.toggleTexture();
         bird.move();
-        batch.draw(bird.getActiveTexture(), bird.getXPos(), bird.getYPos());
 
+        TextureRegion region = new TextureRegion(bird.getActiveTexture(), Bird.getWidth(), Bird.getHeight());
+        batch.draw(region, bird.getXPos(), bird.getYPos(), 0.0f, 0.0f,
+                Bird.getWidth(), Bird.getHeight(),
+                1.0f, 1.0f, bird.getFlyingAngle());
         batch.end();
     }
 
