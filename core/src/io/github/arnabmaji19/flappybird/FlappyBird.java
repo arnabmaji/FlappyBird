@@ -27,12 +27,18 @@ public class FlappyBird extends ApplicationAdapter {
 
     @Override
     public void render() {
+
+        if (Gdx.input.justTouched()) {
+            bird.flyUp();
+        }
+
         batch.begin();
         // draw background image
         batch.draw(backgroundImage, 0, 0, screenWidth, screenHeight);
 
         // bird configurations
         bird.toggleTexture();
+        bird.move();
         batch.draw(bird.getActiveTexture(), bird.getXPos(), bird.getYPos());
 
         batch.end();
