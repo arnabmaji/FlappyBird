@@ -4,10 +4,13 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.arnabmaji19.flappybird.model.Bird;
 
 public class FlappyBird extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture backgroundImage;
+
+    private Bird bird;
 
     private int screenHeight;
     private int screenWidth;
@@ -19,6 +22,7 @@ public class FlappyBird extends ApplicationAdapter {
 
         screenHeight = Gdx.graphics.getHeight();
         screenWidth = Gdx.graphics.getWidth();
+        bird = new Bird(screenHeight, screenWidth);
     }
 
     @Override
@@ -26,6 +30,11 @@ public class FlappyBird extends ApplicationAdapter {
         batch.begin();
         // draw background image
         batch.draw(backgroundImage, 0, 0, screenWidth, screenHeight);
+
+        // bird configurations
+        bird.toggleTexture();
+        batch.draw(bird.getActiveTexture(), bird.getXPos(), bird.getYPos());
+
         batch.end();
     }
 
