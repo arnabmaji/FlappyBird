@@ -106,7 +106,7 @@ public class Tube {
     }
 
     // inner class for tracking upper and lower tube positions
-    private class TubePosition {
+    private static class TubePosition {
 
         private float xPos;
         private float upperTubeY;

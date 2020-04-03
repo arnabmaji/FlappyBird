@@ -32,7 +32,9 @@ public class Bird {
         this.xPos = Screen.WIDTH / 2.5f;
         this.activeTexture = TEXTURES[birdTextureState];
         this.textureRegion = new TextureRegion(activeTexture, BIRD_WIDTH, BIRD_HEIGHT);
-        resetState();
+        this.yPos = Screen.HEIGHT / 2.0f;
+        this.velocity = 0.0f;
+        this.flyingAngle = 0.0f;
     }
 
     public void fly() {
@@ -44,7 +46,6 @@ public class Bird {
         if (flyingAngle <= -90.0f) flyingAngle = -90.0f;
         toggleTexture();  // animate bird's fly
 
-        if (hitsEnd()) resetState();
     }
 
     public void flyUp() {
@@ -61,7 +62,7 @@ public class Bird {
     }
 
     public boolean hitsEnd() {
-        return yPos <= BIRD_HEIGHT;
+        return yPos <= BIRD_HEIGHT || yPos + BIRD_HEIGHT >= Screen.HEIGHT;
     }
 
 
@@ -74,12 +75,6 @@ public class Bird {
             if (birdTextureState == TEXTURES.length) birdTextureState = 0;
             textureChangeDelay = 0;
         }
-    }
-
-    private void resetState() {
-        this.yPos = Screen.HEIGHT / 2.0f;
-        this.velocity = 0.0f;
-        this.flyingAngle = 0.0f;
     }
 
     public float getXPos() {
