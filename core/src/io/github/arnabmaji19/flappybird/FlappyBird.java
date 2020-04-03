@@ -45,6 +45,9 @@ public class FlappyBird extends ApplicationAdapter {
         tube.move();  // move all active tubes along negative x-axis
         tube.draw(batch);  // draw active tubes on the screen
 
+        if (tube.hitsBird(bird)) {
+            System.out.println("Hit");
+        }
         batch.end();
     }
 

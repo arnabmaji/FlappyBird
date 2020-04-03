@@ -2,6 +2,8 @@ package io.github.arnabmaji19.flappybird.model;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.util.LinkedList;
 import java.util.Objects;
@@ -62,6 +64,45 @@ public class Tube {
         float upperTubeY = GAP_HEIGHT + gapY;  // determine Y-coordinate of upper tube
         activeTubes.add(new TubePosition(TUBE_BEGIN_X_POSITION, upperTubeY, lowerTubeY));
 
+    }
+
+    public boolean hitsBird(Bird bird) {
+        for (var tubePos : activeTubes) {
+            float birdX = bird.getXPos();
+            if ((tubePos.xPos + UPPER_TUBE_TEXTURE.getWidth()) >= birdX) {  // only check for tubes that are ahead of bird
+                // create rectangle for bird's current position
+                var birdRectangle = new Rectangle(
+                        birdX,
+                        bird.getYPos(),
+                        Bird.getWidth(),
+                        Bird.getHeight()
+                );
+
+                // create rectangle for upper tube's current position
+                var upperTubeRectangle = new Rectangle(
+                        tubePos.xPos,
+                        tubePos.upperTubeY,
+                        UPPER_TUBE_TEXTURE.getWidth(),
+                        UPPER_TUBE_TEXTURE.getHeight()
+                );
+
+                // create rectangle for lower tube's current position
+                var lowerTubeRectangle = new Rectangle(
+                        tubePos.xPos,
+                        tubePos.lowerTubeY,
+                        LOWER_TUBE_TEXTURE.getWidth(),
+                        LOWER_TUBE_TEXTURE.getHeight()
+                );
+
+                // check if bird hits any of the tubes
+                if (
+                        Intersector.overlaps(birdRectangle, upperTubeRectangle) ||
+                                Intersector.overlaps(birdRectangle, lowerTubeRectangle)
+                ) return true;
+
+            }
+        }
+        return false;
     }
 
     // inner class for tracking upper and lower tube positions

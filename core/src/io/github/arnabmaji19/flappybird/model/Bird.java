@@ -52,17 +52,6 @@ public class Bird {
         flyingAngle = 20.0f;
     }
 
-    private void toggleTexture() {
-        // toggle active texture in a delay
-        if (textureChangeDelay < MAX_TEXTURE_CHANGE_DELAY) textureChangeDelay++;
-        else {
-            activeTexture = TEXTURES[birdTextureState++];
-
-            if (birdTextureState == TEXTURES.length) birdTextureState = 0;
-            textureChangeDelay = 0;
-        }
-    }
-
     public void draw(SpriteBatch batch) {
         textureRegion.setTexture(activeTexture);
         // draw bird in the batch
@@ -75,9 +64,37 @@ public class Bird {
         return yPos <= BIRD_HEIGHT;
     }
 
+
+    private void toggleTexture() {
+        // toggle active texture in a delay
+        if (textureChangeDelay < MAX_TEXTURE_CHANGE_DELAY) textureChangeDelay++;
+        else {
+            activeTexture = TEXTURES[birdTextureState++];
+
+            if (birdTextureState == TEXTURES.length) birdTextureState = 0;
+            textureChangeDelay = 0;
+        }
+    }
+
     private void resetState() {
         this.yPos = Screen.HEIGHT / 2.0f;
         this.velocity = 0.0f;
         this.flyingAngle = 0.0f;
+    }
+
+    public float getXPos() {
+        return xPos;
+    }
+
+    public float getYPos() {
+        return yPos;
+    }
+
+    public static int getHeight() {
+        return BIRD_HEIGHT;
+    }
+
+    public static int getWidth() {
+        return BIRD_WIDTH;
     }
 }
