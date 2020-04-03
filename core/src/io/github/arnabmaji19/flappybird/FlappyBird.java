@@ -37,6 +37,8 @@ public class FlappyBird extends ApplicationAdapter {
 
 
         batch.begin();
+        // draw background image
+        batch.draw(backgroundImage, 0, 0, Screen.WIDTH, Screen.HEIGHT);
 
         // if game is over
         if (gameState.equals(GameState.GAME_OVER)) {
@@ -44,24 +46,19 @@ public class FlappyBird extends ApplicationAdapter {
             batch.draw(gameOverTexture,
                     Screen.WIDTH / 2.0f - gameOverTexture.getWidth() / 2.0f,
                     Screen.HEIGHT / 2.0f - gameOverTexture.getHeight() / 2.0f);
-            batch.end();
-            return;
-        }
-        // draw background image
-        batch.draw(backgroundImage, 0, 0, Screen.WIDTH, Screen.HEIGHT);
+        } else {
+            // bird configurations
+            bird.fly();
+            bird.draw(batch);  // draw bird on the screen
 
-        // bird configurations
-        bird.fly();
-        bird.draw(batch);  // draw bird on the screen
-
-        // tube configurations
-        tube.createInDelay();  // create new tubes in a delay
-        tube.move();  // move all active tubes along negative x-axis
-        tube.draw(batch);  // draw active tubes on the screen
-
-        if (tube.hitsBird(bird) || bird.hitsEnd()) {
-            // game over
-            gameState = GameState.GAME_OVER;
+            // tube configurations
+            tube.createInDelay();  // create new tubes in a delay
+            tube.move();  // move all active tubes along negative x-axis
+            tube.draw(batch);  // draw active tubes on the screen
+            if (tube.hitsBird(bird) || bird.hitsEnd()) {
+                // game over
+                gameState = GameState.GAME_OVER;
+            }
         }
 
         batch.end();
@@ -78,6 +75,7 @@ public class FlappyBird extends ApplicationAdapter {
         bird = new Bird();
         tube = new Tube();
         gameState = GameState.RUNNING;
+        tube.addJustCrossedListener(() -> System.out.println("Just crossed!"));
     }
 
     private enum GameState {RUNNING, GAME_OVER}

@@ -65,7 +65,6 @@ public class Bird {
         return yPos <= BIRD_HEIGHT || yPos + BIRD_HEIGHT >= Screen.HEIGHT;
     }
 
-
     private void toggleTexture() {
         // toggle active texture in a delay
         if (textureChangeDelay < MAX_TEXTURE_CHANGE_DELAY) textureChangeDelay++;

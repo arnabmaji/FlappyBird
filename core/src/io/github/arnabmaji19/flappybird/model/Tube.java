@@ -1,5 +1,6 @@
 package io.github.arnabmaji19.flappybird.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
@@ -24,6 +25,7 @@ public class Tube {
 
     private Queue<TubePosition> activeTubes;  // currently active tubes
     private Queue<TubePosition> inActiveTubes;  // tubes out of screen
+    private JustCrossedListener justCrossedListener;
     private int tubeCreationDelay = 0;
 
     public Tube() {
@@ -32,6 +34,7 @@ public class Tube {
     }
 
     public void move() {
+
         for (var tubePos : activeTubes) {
             tubePos.xPos += TUBE_VELOCITY;  // move all active tubes along negative x-axis
             // check for inactive tubes
@@ -42,6 +45,7 @@ public class Tube {
     }
 
     public void createInDelay() {
+
         if (tubeCreationDelay < MAX_TUBE_CREATION_DELAY) tubeCreationDelay++;
         else {
             create();
@@ -67,12 +71,18 @@ public class Tube {
     }
 
     public boolean hitsBird(Bird bird) {
+
         for (var tubePos : activeTubes) {
-            float birdX = bird.getXPos();
-            if ((tubePos.xPos + UPPER_TUBE_TEXTURE.getWidth()) >= birdX) {  // only check for tubes that are ahead of bird
+
+            float birdRear = bird.getXPos();
+            float birdFront = birdRear + Bird.getWidth();
+            float tubeFront = tubePos.xPos;
+            float tubeRear = tubeFront + UPPER_TUBE_TEXTURE.getWidth();
+
+            if (birdFront >= tubeFront && birdRear <= tubeRear) {  // only check for tubes that are nearest
                 // create rectangle for bird's current position
                 var birdRectangle = new Rectangle(
-                        birdX,
+                        birdRear,
                         bird.getYPos(),
                         Bird.getWidth(),
                         Bird.getHeight()
@@ -80,7 +90,7 @@ public class Tube {
 
                 // create rectangle for upper tube's current position
                 var upperTubeRectangle = new Rectangle(
-                        tubePos.xPos,
+                        tubeFront,
                         tubePos.upperTubeY,
                         UPPER_TUBE_TEXTURE.getWidth(),
                         UPPER_TUBE_TEXTURE.getHeight()
@@ -88,11 +98,13 @@ public class Tube {
 
                 // create rectangle for lower tube's current position
                 var lowerTubeRectangle = new Rectangle(
-                        tubePos.xPos,
+                        tubeFront,
                         tubePos.lowerTubeY,
                         LOWER_TUBE_TEXTURE.getWidth(),
                         LOWER_TUBE_TEXTURE.getHeight()
                 );
+
+                Gdx.app.log("Checking-For-Collision", "");
 
                 // check if bird hits any of the tubes
                 if (
@@ -101,9 +113,18 @@ public class Tube {
                 ) return true;
 
             }
+
+            // check if bird just crossed any tube
+            if ((birdRear - tubeRear) == 1.0f) justCrossedListener.justCrossed();
+
         }
         return false;
     }
+
+    public void addJustCrossedListener(JustCrossedListener justCrossedListener) {
+        this.justCrossedListener = justCrossedListener;
+    }
+
 
     // inner class for tracking upper and lower tube positions
     private static class TubePosition {
@@ -132,6 +153,10 @@ public class Tube {
         public int hashCode() {
             return Objects.hash(xPos, upperTubeY, lowerTubeY);
         }
+    }
+
+    public interface JustCrossedListener {
+        void justCrossed();
     }
 
 }
