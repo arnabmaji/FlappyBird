@@ -1,6 +1,5 @@
 package io.github.arnabmaji19.flappybird.model;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
@@ -103,8 +102,6 @@ public class Tube {
                         LOWER_TUBE_TEXTURE.getWidth(),
                         LOWER_TUBE_TEXTURE.getHeight()
                 );
-
-                Gdx.app.log("Checking-For-Collision", "");
 
                 // check if bird hits any of the tubes
                 if (

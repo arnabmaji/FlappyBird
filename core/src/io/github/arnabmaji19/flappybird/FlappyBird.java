@@ -4,30 +4,27 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import io.github.arnabmaji19.flappybird.model.Bird;
-import io.github.arnabmaji19.flappybird.model.ScoreBoard;
-import io.github.arnabmaji19.flappybird.model.Screen;
-import io.github.arnabmaji19.flappybird.model.Tube;
+import io.github.arnabmaji19.flappybird.model.*;
 
 public class FlappyBird extends ApplicationAdapter {
 
     private SpriteBatch batch;
     private Texture backgroundImage;
     private Texture gameOverTexture;
-    private Texture texture;
 
     private Bird bird;
     private Tube tube;
     private ScoreBoard scoreBoard;
     private GameState gameState;
+    private GameMessageTexture gameMessageTexture;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         backgroundImage = new Texture("background-day.png");
         gameOverTexture = new Texture("game-over.png");
-
-        startNewGame();
+        gameMessageTexture = new GameMessageTexture(new Texture("message.png"));
+        gameState = GameState.READY;
     }
 
     @Override
@@ -35,7 +32,8 @@ public class FlappyBird extends ApplicationAdapter {
 
         if (Gdx.input.justTouched()) {  // on touch
             if (gameState.equals(GameState.RUNNING)) bird.flyUp();  // fly in upward direction
-            else startNewGame();
+            else if (gameState.equals(GameState.READY)) startNewGame();
+            else gameState = GameState.READY;
         }
 
 
@@ -50,7 +48,8 @@ public class FlappyBird extends ApplicationAdapter {
                     Screen.WIDTH / 2.0f - gameOverTexture.getWidth() / 2.0f,
                     Screen.HEIGHT / 2.0f - gameOverTexture.getHeight() / 2.0f);
             scoreBoard.draw(batch);
-        } else {
+
+        } else if (gameState.equals(GameState.RUNNING)) {
             // bird configurations
             bird.fly();
             bird.draw(batch);  // draw bird on the screen
@@ -63,9 +62,10 @@ public class FlappyBird extends ApplicationAdapter {
                 // game over
                 gameState = GameState.GAME_OVER;
             }
-        }
+            scoreBoard.draw(batch);
 
-        scoreBoard.draw(batch);
+        } else gameMessageTexture.draw(batch);
+
         batch.end();
     }
 
@@ -77,16 +77,19 @@ public class FlappyBird extends ApplicationAdapter {
     }
 
     private void startNewGame() {
+        // create new game
         bird = new Bird();
         tube = new Tube();
         gameState = GameState.RUNNING;
         scoreBoard = new ScoreBoard();
+
         tube.addJustCrossedListener(() -> {
-            scoreBoard.increment();
-            scoreBoard.createScoreList();
+            scoreBoard.increment();  // increment score
+            scoreBoard.createScoreList();  // update numbers for displaying score
         });
-        scoreBoard.createScoreList();
+
+        scoreBoard.createScoreList();  // create numbers for displaying score
     }
 
-    private enum GameState {RUNNING, GAME_OVER}
+    private enum GameState {READY, RUNNING, GAME_OVER}
 }
