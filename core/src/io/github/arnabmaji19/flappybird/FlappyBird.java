@@ -4,47 +4,47 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import io.github.arnabmaji19.flappybird.model.Bird;
+import io.github.arnabmaji19.flappybird.model.Screen;
+import io.github.arnabmaji19.flappybird.model.Tube;
 
 public class FlappyBird extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture backgroundImage;
 
     private Bird bird;
+    private Tube tube;
 
-    private int screenHeight;
-    private int screenWidth;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         backgroundImage = new Texture("background-day.png");
 
-        screenHeight = Gdx.graphics.getHeight();
-        screenWidth = Gdx.graphics.getWidth();
-        bird = new Bird(screenHeight, screenWidth);
+        bird = new Bird();
+        tube = new Tube();
     }
 
     @Override
     public void render() {
 
-        if (Gdx.input.justTouched()) {
-            bird.flyUp();
+        if (Gdx.input.justTouched()) {  // on touch
+            bird.flyUp();  // fly in upward direction
         }
 
         batch.begin();
         // draw background image
-        batch.draw(backgroundImage, 0, 0, screenWidth, screenHeight);
+        batch.draw(backgroundImage, 0, 0, Screen.WIDTH, Screen.HEIGHT);
 
         // bird configurations
-        bird.toggleTexture();
-        bird.move();
+        bird.fly();
+        bird.draw(batch);  // draw bird on the screen
 
-        TextureRegion region = new TextureRegion(bird.getActiveTexture(), Bird.getWidth(), Bird.getHeight());
-        batch.draw(region, bird.getXPos(), bird.getYPos(), 0.0f, 0.0f,
-                Bird.getWidth(), Bird.getHeight(),
-                1.0f, 1.0f, bird.getFlyingAngle());
+        // tube configurations
+        tube.createInDelay();  // create new tubes in a delay
+        tube.move();  // move all active tubes along negative x-axis
+        tube.draw(batch);  // draw active tubes on the screen
+
         batch.end();
     }
 
