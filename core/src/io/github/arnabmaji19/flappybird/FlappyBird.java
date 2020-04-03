@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import io.github.arnabmaji19.flappybird.model.Bird;
+import io.github.arnabmaji19.flappybird.model.ScoreBoard;
 import io.github.arnabmaji19.flappybird.model.Screen;
 import io.github.arnabmaji19.flappybird.model.Tube;
 
@@ -13,9 +14,11 @@ public class FlappyBird extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture backgroundImage;
     private Texture gameOverTexture;
+    private Texture texture;
 
     private Bird bird;
     private Tube tube;
+    private ScoreBoard scoreBoard;
     private GameState gameState;
 
     @Override
@@ -46,6 +49,7 @@ public class FlappyBird extends ApplicationAdapter {
             batch.draw(gameOverTexture,
                     Screen.WIDTH / 2.0f - gameOverTexture.getWidth() / 2.0f,
                     Screen.HEIGHT / 2.0f - gameOverTexture.getHeight() / 2.0f);
+            scoreBoard.draw(batch);
         } else {
             // bird configurations
             bird.fly();
@@ -61,6 +65,7 @@ public class FlappyBird extends ApplicationAdapter {
             }
         }
 
+        scoreBoard.draw(batch);
         batch.end();
     }
 
@@ -75,7 +80,12 @@ public class FlappyBird extends ApplicationAdapter {
         bird = new Bird();
         tube = new Tube();
         gameState = GameState.RUNNING;
-        tube.addJustCrossedListener(() -> System.out.println("Just crossed!"));
+        scoreBoard = new ScoreBoard();
+        tube.addJustCrossedListener(() -> {
+            scoreBoard.increment();
+            scoreBoard.createScoreList();
+        });
+        scoreBoard.createScoreList();
     }
 
     private enum GameState {RUNNING, GAME_OVER}
