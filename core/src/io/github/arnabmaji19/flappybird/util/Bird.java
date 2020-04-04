@@ -7,19 +7,38 @@ import io.github.arnabmaji19.flappybird.model.Screen;
 
 public class Bird {
 
+    public static final int YELLOW = 0;
+    public static final int BLUE = 1;
+    public static final int RED = 2;
+
     // all possible textures for bird
-    private static final Texture[] TEXTURES = {
-            new Texture("sprites/bird-downflap.png"),
-            new Texture("sprites/bird-midflap.png"),
-            new Texture("sprites/bird-upflap.png")
+    private static final Texture[][] TEXTURES = {
+            {
+                    new Texture("sprites/bird/yellowbird-downflap.png"),
+                    new Texture("sprites/bird/yellowbird-midflap.png"),
+                    new Texture("sprites/bird/yellowbird-upflap.png")
+            },
+
+            {
+                    new Texture("sprites/bird/bluebird-downflap.png"),
+                    new Texture("sprites/bird/bluebird-midflap.png"),
+                    new Texture("sprites/bird/bluebird-upflap.png")
+            },
+            {
+                    new Texture("sprites/bird/redbird-downflap.png"),
+                    new Texture("sprites/bird/redbird-midflap.png"),
+                    new Texture("sprites/bird/redbird-upflap.png")
+            }
     };
-    private static final int BIRD_WIDTH = TEXTURES[0].getWidth();
-    private static final int BIRD_HEIGHT = TEXTURES[0].getHeight();
+
+    private static final int BIRD_WIDTH = TEXTURES[0][0].getWidth();
+    private static final int BIRD_HEIGHT = TEXTURES[0][0].getHeight();
     private static final int MAX_TEXTURE_CHANGE_DELAY = 3;
     private static final float GRAVITY = 0.2f;
     private static final float UPWARD_VELOCITY = -5.0f;
 
     private Texture activeTexture;
+    private int activeColor = 0;
     private TextureRegion textureRegion;
     private float xPos;
     private float yPos;
@@ -31,7 +50,7 @@ public class Bird {
 
     public Bird() {
         this.xPos = Screen.WIDTH / 2.5f;
-        this.activeTexture = TEXTURES[birdTextureState];
+        this.activeTexture = TEXTURES[activeColor][birdTextureState];
         this.textureRegion = new TextureRegion(activeTexture, BIRD_WIDTH, BIRD_HEIGHT);
         this.yPos = Screen.HEIGHT / 2.0f;
         this.velocity = 0.0f;
@@ -70,11 +89,15 @@ public class Bird {
         // toggle active texture in a delay
         if (textureChangeDelay < MAX_TEXTURE_CHANGE_DELAY) textureChangeDelay++;
         else {
-            activeTexture = TEXTURES[birdTextureState++];
+            activeTexture = TEXTURES[activeColor][birdTextureState++];
 
             if (birdTextureState == TEXTURES.length) birdTextureState = 0;
             textureChangeDelay = 0;
         }
+    }
+
+    public void setColor(int color) {
+        this.activeColor = color;
     }
 
     public float getXPos() {
@@ -94,6 +117,6 @@ public class Bird {
     }
 
     public static void dispose() {
-        for (var texture : TEXTURES) texture.dispose();
+        for (var texture : TEXTURES) for (var t : texture) t.dispose();
     }
 }

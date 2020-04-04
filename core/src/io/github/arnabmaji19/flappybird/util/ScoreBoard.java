@@ -25,7 +25,7 @@ public class ScoreBoard {
 
     private ScoreListener scoreListener;
     private List<Score> scoreList;
-    private int score = 0;
+    public int score = 0;
 
     public ScoreBoard() {
         this.scoreList = new ArrayList<>();
@@ -34,7 +34,7 @@ public class ScoreBoard {
     public void increment() {
         score += STEP;
 
-        if (score % 25 == 0) scoreListener.onLevel(score);
+        if (score % 50 == 0) scoreListener.onLevel(score);
     }
 
     public void reset() {

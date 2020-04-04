@@ -34,11 +34,10 @@ public class FlappyBird extends ApplicationAdapter {
 
         scoreBoard = new ScoreBoard();
         scoreBoard.addScoreListener((score -> {
-            if (score == 25) {
+            if (score == 50) {
                 // change background to night
                 gameBackgroundImage.set(GameBackgroundImage.NIGHT);
-            } else if (score == 50) {
-                // change background to day
+                bird.setColor(Bird.BLUE);
             }
         }));
 
@@ -122,6 +121,7 @@ public class FlappyBird extends ApplicationAdapter {
         tube = new Tube();
         gameState = GameState.RUNNING;
         scoreBoard.reset();
+        scoreBoard.score = 46;
         tube.addJustCrossedListener(() -> {
             scoreBoard.increment();  // increment score
             scoreBoard.createScoreList();  // update numbers for displaying score
