@@ -70,8 +70,8 @@ public class FlappyBird extends ApplicationAdapter {
 
             // game over
             if (tube.hitsBird(bird)) {
-                soundManager.play(SoundManager.HIT);
-                gameState = GameState.GAME_OVER;
+//                soundManager.play(SoundManager.HIT);
+//                gameState = GameState.GAME_OVER;
             } else if (bird.hitsEnd()) {
                 soundManager.play(SoundManager.DIE);
                 gameState = GameState.GAME_OVER;

@@ -16,7 +16,7 @@ public class Bird {
     private static final int BIRD_HEIGHT = TEXTURES[0].getHeight();
     private static final int MAX_TEXTURE_CHANGE_DELAY = 3;
     private static final float GRAVITY = 0.2f;
-    private static final float UPWARD_VELOCITY = -4.5f;
+    private static final float UPWARD_VELOCITY = -5.0f;
 
     private Texture activeTexture;
     private TextureRegion textureRegion;

@@ -15,12 +15,12 @@ public class Tube {
     private static final Texture UPPER_TUBE_TEXTURE = new Texture("sprites/top-tube.png");  // texture for upper tube
     private static final Texture LOWER_TUBE_TEXTURE = new Texture("sprites/bottom-tube.png");  // texture for lower tube
     private static final int TUBE_LENGTH = UPPER_TUBE_TEXTURE.getHeight();
-    private static final int GAP_HEIGHT = 100;  // height of gap between upper and lower tubes
+    private static final int GAP_HEIGHT = 150;  // height of gap between upper and lower tubes
     private static final int LOWER_RANGE = (Screen.HEIGHT) / 14;  // lower range for y-pos of gap between upper and lower tube
     private static final int UPPER_RANGE = (Screen.HEIGHT * 11) / 14 - GAP_HEIGHT;  // upper range for y-pos of gap between upper and lower tube
     private static final int TUBE_BEGIN_X_POSITION = Screen.WIDTH;  // starting x position for all new tubes
-    private static final int MAX_TUBE_CREATION_DELAY = 300;  // delay for creating tubes on screen
-    private static final float TUBE_VELOCITY = -1.0f;  // Tube's velocity along negative x-axis
+    private static final int MAX_TUBE_CREATION_DELAY = 120;  // delay for creating tubes on screen
+    private static final float TUBE_VELOCITY = -3.0f;  // Tube's velocity along negative x-axis
 
     private Queue<TubePosition> activeTubes;  // currently active tubes
     private Queue<TubePosition> inActiveTubes;  // tubes out of screen
@@ -112,7 +112,8 @@ public class Tube {
             }
 
             // check if bird just crossed any tube
-            if ((birdRear - tubeRear) == 1.0f) justCrossedListener.justCrossed();
+            var distance = birdRear - tubeRear;
+            if (distance >= 0.0f && distance < -TUBE_VELOCITY) justCrossedListener.justCrossed();
 
         }
         return false;
