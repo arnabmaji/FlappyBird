@@ -27,7 +27,7 @@ public class FlappyBird extends ApplicationAdapter {
 
         gameMessageTexture = new GameMessageTexture(new Texture("sprites/message.png"));
         soundManager = new SoundManager();
-        soundManager.playBackgroundMusic();
+        soundManager.backgroundMusic(SoundManager.PLAY);
         gameState = GameState.READY;
     }
 
@@ -39,16 +39,21 @@ public class FlappyBird extends ApplicationAdapter {
                 bird.flyUp();  // fly in upward direction
                 soundManager.play(SoundManager.WING);  // play wing sound
             } else if (gameState.equals(GameState.READY)) startNewGame();
-            else gameState = GameState.READY;
+                // game state: game over
+            else {
+                soundManager.backgroundMusic(SoundManager.PLAY);
+                gameState = GameState.READY;
+            }
         }
 
 
         batch.begin();
-        // draw background image
+        // draw background image);
         batch.draw(backgroundImage, 0, 0, Screen.WIDTH, Screen.HEIGHT);
 
         // if game is over
         if (gameState.equals(GameState.GAME_OVER)) {
+
             bird.draw(batch);  // draw bird on the screen
             tube.draw(batch);  // draw active tubes on the screen
 
@@ -57,8 +62,8 @@ public class FlappyBird extends ApplicationAdapter {
                     Screen.WIDTH / 2.0f - gameOverTexture.getWidth() / 2.0f,
                     Screen.HEIGHT / 2.0f - gameOverTexture.getHeight() / 2.0f);
             scoreBoard.draw(batch);
-
         } else if (gameState.equals(GameState.RUNNING)) {
+
             // bird configurations
             bird.fly();
             bird.draw(batch);  // draw bird on the screen
@@ -69,17 +74,19 @@ public class FlappyBird extends ApplicationAdapter {
             tube.draw(batch);  // draw active tubes on the screen
 
             // game over
-            if (tube.hitsBird(bird)) {
-//                soundManager.play(SoundManager.HIT);
-//                gameState = GameState.GAME_OVER;
-            } else if (bird.hitsEnd()) {
-                soundManager.play(SoundManager.DIE);
+            if (tube.hitsBird(bird) || bird.hitsEnd()) {
+                soundManager.play(bird.hitsEnd() ? SoundManager.DIE : SoundManager.HIT);
+                // change game state
                 gameState = GameState.GAME_OVER;
+                soundManager.backgroundMusic(SoundManager.STOP);  // pause background music
+                soundManager.play(SoundManager.GAME_OVER); // play game over sound effect
             }
 
             scoreBoard.draw(batch);
 
-        } else gameMessageTexture.draw(batch);
+        } else {
+            gameMessageTexture.draw(batch);
+        }
 
         batch.end();
     }
