@@ -20,13 +20,14 @@ public class Tube {
     private static final int LOWER_RANGE = (Screen.HEIGHT) / 14;  // lower range for y-pos of gap between upper and lower tube
     private static final int UPPER_RANGE = (Screen.HEIGHT * 11) / 14 - GAP_HEIGHT;  // upper range for y-pos of gap between upper and lower tube
     private static final int TUBE_BEGIN_X_POSITION = Screen.WIDTH;  // starting x position for all new tubes
-    private static final int MAX_TUBE_CREATION_DELAY = 120;  // delay for creating tubes on screen
-    private static final float TUBE_VELOCITY = -3.0f;  // Tube's velocity along negative x-axis
 
     private Queue<TubePosition> activeTubes;  // currently active tubes
     private Queue<TubePosition> inActiveTubes;  // tubes out of screen
     private JustCrossedListener justCrossedListener;
+    private int maxTubeCreationDelay = 120;  // delay for creating tubes on screen
     private int tubeCreationDelay = 0;
+    private float velocity = -3.0f;  // Tube's velocity along negative x-axis
+    private boolean lastTube = false;
 
     public Tube() {
         this.activeTubes = new LinkedList<>();
@@ -36,7 +37,7 @@ public class Tube {
     public void move() {
 
         for (var tubePos : activeTubes) {
-            tubePos.xPos += TUBE_VELOCITY;  // move all active tubes along negative x-axis
+            tubePos.xPos += velocity;  // move all active tubes along negative x-axis
             // check for inactive tubes
             if (tubePos.xPos <= -UPPER_TUBE_TEXTURE.getWidth()) inActiveTubes.add(tubePos);
         }
@@ -46,9 +47,9 @@ public class Tube {
 
     public void createInDelay() {
 
-        if (tubeCreationDelay < MAX_TUBE_CREATION_DELAY) tubeCreationDelay++;
+        if (tubeCreationDelay < maxTubeCreationDelay) tubeCreationDelay++;
         else {
-            create();
+            create(lastTube ? 0 : GAP_HEIGHT);
             tubeCreationDelay = 0;
         }
     }
@@ -61,13 +62,17 @@ public class Tube {
         }
     }
 
-    private void create() {
+    private void create(int gap) {
         // generate random Y-coordinate for gap
         float gapY = (float) (Math.random() * (float) UPPER_RANGE) + LOWER_RANGE;
         float lowerTubeY = gapY - TUBE_LENGTH;  // determine Y-coordinate of lower tube
-        float upperTubeY = GAP_HEIGHT + gapY;  // determine Y-coordinate of upper tube
+        float upperTubeY = gap + gapY;  // determine Y-coordinate of upper tube
         activeTubes.add(new TubePosition(TUBE_BEGIN_X_POSITION, upperTubeY, lowerTubeY));
 
+    }
+
+    public void createLastTube() {
+        lastTube = true;
     }
 
     public boolean hitsBird(Bird bird) {
@@ -114,7 +119,7 @@ public class Tube {
 
             // check if bird just crossed any tube
             var distance = birdRear - tubeRear;
-            if (distance >= 0.0f && distance < -TUBE_VELOCITY) justCrossedListener.justCrossed();
+            if (distance >= 0.0f && distance < -velocity) justCrossedListener.justCrossed();
 
         }
         return false;
@@ -124,12 +129,22 @@ public class Tube {
         this.justCrossedListener = justCrossedListener;
     }
 
+    public static void dispose() {
+        UPPER_TUBE_TEXTURE.dispose();
+        LOWER_TUBE_TEXTURE.dispose();
+    }
+
+    public void increaseVelocity() {
+        velocity -= 2.0f;
+        maxTubeCreationDelay -= 40;
+    }
 
     // inner class for tracking upper and lower tube positions
     private static class TubePosition {
 
         private float xPos;
         private float upperTubeY;
+
         private float lowerTubeY;
 
         public TubePosition(float xPos, float upperTubeY, float lowerTubeY) {
@@ -147,16 +162,11 @@ public class Tube {
                     Float.compare(that.upperTubeY, upperTubeY) == 0 &&
                     Float.compare(that.lowerTubeY, lowerTubeY) == 0;
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(xPos, upperTubeY, lowerTubeY);
         }
-    }
 
-    public static void dispose() {
-        UPPER_TUBE_TEXTURE.dispose();
-        LOWER_TUBE_TEXTURE.dispose();
     }
 
     public interface JustCrossedListener {

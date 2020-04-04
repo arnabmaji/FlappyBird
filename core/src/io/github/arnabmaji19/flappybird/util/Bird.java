@@ -35,17 +35,17 @@ public class Bird {
     private static final int BIRD_HEIGHT = TEXTURES[0][0].getHeight();
     private static final int MAX_TEXTURE_CHANGE_DELAY = 3;
     private static final float GRAVITY = 0.2f;
-    private static final float UPWARD_VELOCITY = -5.0f;
 
     private Texture activeTexture;
     private int activeColor = 0;
     private TextureRegion textureRegion;
     private float xPos;
     private float yPos;
+    private float upwardVelocity = -5.0f;
+    private float velocity;
 
     private int birdTextureState = 0;
     private int textureChangeDelay = 0;
-    private float velocity;
     private float flyingAngle;
 
     public Bird() {
@@ -69,7 +69,7 @@ public class Bird {
     }
 
     public void flyUp() {
-        velocity = UPWARD_VELOCITY;
+        velocity = upwardVelocity;
         flyingAngle = 20.0f;
     }
 
@@ -114,6 +114,10 @@ public class Bird {
 
     public static int getWidth() {
         return BIRD_WIDTH;
+    }
+
+    public void increaseJumpVelocity() {
+        upwardVelocity -= 1.0f;
     }
 
     public static void dispose() {
