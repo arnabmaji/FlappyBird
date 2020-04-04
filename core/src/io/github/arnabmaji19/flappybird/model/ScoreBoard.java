@@ -49,10 +49,14 @@ public class ScoreBoard {
         int y = 10;
 
         for (var digit : (score + "").toCharArray()) {
-            var texture = numbers[Integer.valueOf(digit + "")];
+            var texture = numbers[digit - '0'];
             scoreList.add(new Score(texture, x, y));
             x += texture.getWidth();
         }
+    }
+
+    public static void dispose() {
+        for (var num : numbers) num.dispose();
     }
 
 }

@@ -90,6 +90,9 @@ public class FlappyBird extends ApplicationAdapter {
         backgroundImage.dispose();
         gameOverTexture.dispose();
         soundManager.dispose();
+        Bird.dispose();
+        Tube.dispose();
+        ScoreBoard.dispose();
     }
 
     private void startNewGame() {

@@ -91,4 +91,8 @@ public class Bird {
     public static int getWidth() {
         return BIRD_WIDTH;
     }
+
+    public static void dispose() {
+        for (var texture : TEXTURES) texture.dispose();
+    }
 }

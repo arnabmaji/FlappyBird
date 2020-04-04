@@ -152,6 +152,11 @@ public class Tube {
         }
     }
 
+    public static void dispose() {
+        UPPER_TUBE_TEXTURE.dispose();
+        LOWER_TUBE_TEXTURE.dispose();
+    }
+
     public interface JustCrossedListener {
         void justCrossed();
     }
