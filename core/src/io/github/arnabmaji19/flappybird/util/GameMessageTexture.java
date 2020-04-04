@@ -1,7 +1,8 @@
-package io.github.arnabmaji19.flappybird.model;
+package io.github.arnabmaji19.flappybird.util;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.arnabmaji19.flappybird.model.Screen;
 
 public class GameMessageTexture {
 

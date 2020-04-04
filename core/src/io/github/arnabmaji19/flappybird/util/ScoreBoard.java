@@ -1,7 +1,8 @@
-package io.github.arnabmaji19.flappybird.model;
+package io.github.arnabmaji19.flappybird.util;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import io.github.arnabmaji19.flappybird.model.Score;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ScoreBoard {
             new Texture("sprites/9.png"),
     };
 
+    private ScoreListener scoreListener;
     private List<Score> scoreList;
     private int score = 0;
 
@@ -31,10 +33,13 @@ public class ScoreBoard {
 
     public void increment() {
         score += STEP;
+
+        if (score % 25 == 0) scoreListener.onLevel(score);
     }
 
     public void reset() {
         score = 0;
+        createScoreList();
     }
 
     public void draw(SpriteBatch batch) {
@@ -59,4 +64,11 @@ public class ScoreBoard {
         for (var num : numbers) num.dispose();
     }
 
+    public void addScoreListener(ScoreListener scoreListener) {
+        this.scoreListener = scoreListener;
+    }
+
+    public interface ScoreListener {
+        void onLevel(int score);
+    }
 }

@@ -4,12 +4,12 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import io.github.arnabmaji19.flappybird.model.*;
+import io.github.arnabmaji19.flappybird.model.Screen;
+import io.github.arnabmaji19.flappybird.util.*;
 
 public class FlappyBird extends ApplicationAdapter {
 
     private SpriteBatch batch;
-    private Texture backgroundImage;
     private Texture gameOverTexture;
 
     private Bird bird;
@@ -18,16 +18,30 @@ public class FlappyBird extends ApplicationAdapter {
     private GameState gameState;
     private GameMessageTexture gameMessageTexture;
     private SoundManager soundManager;
+    private GameBackgroundImage gameBackgroundImage;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        backgroundImage = new Texture("sprites/background-day.png");
         gameOverTexture = new Texture("sprites/game-over.png");
 
         gameMessageTexture = new GameMessageTexture(new Texture("sprites/message.png"));
+
         soundManager = new SoundManager();
         soundManager.backgroundMusic(SoundManager.PLAY);
+
+        gameBackgroundImage = new GameBackgroundImage();
+
+        scoreBoard = new ScoreBoard();
+        scoreBoard.addScoreListener((score -> {
+            if (score == 25) {
+                // change background to night
+                gameBackgroundImage.set(GameBackgroundImage.NIGHT);
+            } else if (score == 50) {
+                // change background to day
+            }
+        }));
+
         gameState = GameState.READY;
     }
 
@@ -49,7 +63,7 @@ public class FlappyBird extends ApplicationAdapter {
 
         batch.begin();
         // draw background image);
-        batch.draw(backgroundImage, 0, 0, Screen.WIDTH, Screen.HEIGHT);
+        batch.draw(gameBackgroundImage.get(), 0, 0, Screen.WIDTH, Screen.HEIGHT);
 
         // if game is over
         if (gameState.equals(GameState.GAME_OVER)) {
@@ -94,12 +108,12 @@ public class FlappyBird extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        backgroundImage.dispose();
         gameOverTexture.dispose();
         soundManager.dispose();
         Bird.dispose();
         Tube.dispose();
         ScoreBoard.dispose();
+        GameBackgroundImage.dispose();
     }
 
     private void startNewGame() {
@@ -107,8 +121,7 @@ public class FlappyBird extends ApplicationAdapter {
         bird = new Bird();
         tube = new Tube();
         gameState = GameState.RUNNING;
-        scoreBoard = new ScoreBoard();
-
+        scoreBoard.reset();
         tube.addJustCrossedListener(() -> {
             scoreBoard.increment();  // increment score
             scoreBoard.createScoreList();  // update numbers for displaying score

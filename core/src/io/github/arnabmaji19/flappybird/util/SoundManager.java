@@ -1,4 +1,4 @@
-package io.github.arnabmaji19.flappybird.model;
+package io.github.arnabmaji19.flappybird.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

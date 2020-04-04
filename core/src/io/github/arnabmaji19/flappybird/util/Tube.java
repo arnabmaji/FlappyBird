@@ -1,9 +1,10 @@
-package io.github.arnabmaji19.flappybird.model;
+package io.github.arnabmaji19.flappybird.util;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import io.github.arnabmaji19.flappybird.model.Screen;
 
 import java.util.LinkedList;
 import java.util.Objects;
