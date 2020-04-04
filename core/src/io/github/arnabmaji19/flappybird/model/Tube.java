@@ -12,8 +12,8 @@ import java.util.Queue;
 
 public class Tube {
 
-    private static final Texture UPPER_TUBE_TEXTURE = new Texture("top-tube.png");  // texture for upper tube
-    private static final Texture LOWER_TUBE_TEXTURE = new Texture("bottom-tube.png");  // texture for lower tube
+    private static final Texture UPPER_TUBE_TEXTURE = new Texture("sprites/top-tube.png");  // texture for upper tube
+    private static final Texture LOWER_TUBE_TEXTURE = new Texture("sprites/bottom-tube.png");  // texture for lower tube
     private static final int TUBE_LENGTH = UPPER_TUBE_TEXTURE.getHeight();
     private static final int GAP_HEIGHT = 100;  // height of gap between upper and lower tubes
     private static final int LOWER_RANGE = (Screen.HEIGHT) / 14;  // lower range for y-pos of gap between upper and lower tube

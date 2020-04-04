@@ -17,13 +17,17 @@ public class FlappyBird extends ApplicationAdapter {
     private ScoreBoard scoreBoard;
     private GameState gameState;
     private GameMessageTexture gameMessageTexture;
+    private SoundManager soundManager;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        backgroundImage = new Texture("background-day.png");
-        gameOverTexture = new Texture("game-over.png");
-        gameMessageTexture = new GameMessageTexture(new Texture("message.png"));
+        backgroundImage = new Texture("sprites/background-day.png");
+        gameOverTexture = new Texture("sprites/game-over.png");
+
+        gameMessageTexture = new GameMessageTexture(new Texture("sprites/message.png"));
+        soundManager = new SoundManager();
+        soundManager.playBackgroundMusic();
         gameState = GameState.READY;
     }
 
@@ -31,8 +35,10 @@ public class FlappyBird extends ApplicationAdapter {
     public void render() {
 
         if (Gdx.input.justTouched()) {  // on touch
-            if (gameState.equals(GameState.RUNNING)) bird.flyUp();  // fly in upward direction
-            else if (gameState.equals(GameState.READY)) startNewGame();
+            if (gameState.equals(GameState.RUNNING)) {
+                bird.flyUp();  // fly in upward direction
+                soundManager.play(SoundManager.WING);  // play wing sound
+            } else if (gameState.equals(GameState.READY)) startNewGame();
             else gameState = GameState.READY;
         }
 
@@ -43,6 +49,9 @@ public class FlappyBird extends ApplicationAdapter {
 
         // if game is over
         if (gameState.equals(GameState.GAME_OVER)) {
+            bird.draw(batch);  // draw bird on the screen
+            tube.draw(batch);  // draw active tubes on the screen
+
             // draw game over screen
             batch.draw(gameOverTexture,
                     Screen.WIDTH / 2.0f - gameOverTexture.getWidth() / 2.0f,
@@ -58,10 +67,16 @@ public class FlappyBird extends ApplicationAdapter {
             tube.createInDelay();  // create new tubes in a delay
             tube.move();  // move all active tubes along negative x-axis
             tube.draw(batch);  // draw active tubes on the screen
-            if (tube.hitsBird(bird) || bird.hitsEnd()) {
-                // game over
+
+            // game over
+            if (tube.hitsBird(bird)) {
+                soundManager.play(SoundManager.HIT);
+                gameState = GameState.GAME_OVER;
+            } else if (bird.hitsEnd()) {
+                soundManager.play(SoundManager.DIE);
                 gameState = GameState.GAME_OVER;
             }
+
             scoreBoard.draw(batch);
 
         } else gameMessageTexture.draw(batch);
@@ -74,6 +89,7 @@ public class FlappyBird extends ApplicationAdapter {
         batch.dispose();
         backgroundImage.dispose();
         gameOverTexture.dispose();
+        soundManager.dispose();
     }
 
     private void startNewGame() {
@@ -86,6 +102,7 @@ public class FlappyBird extends ApplicationAdapter {
         tube.addJustCrossedListener(() -> {
             scoreBoard.increment();  // increment score
             scoreBoard.createScoreList();  // update numbers for displaying score
+            soundManager.play(SoundManager.POINT);  // play sound
         });
 
         scoreBoard.createScoreList();  // create numbers for displaying score

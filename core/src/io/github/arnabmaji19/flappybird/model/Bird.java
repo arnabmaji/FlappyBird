@@ -8,9 +8,9 @@ public class Bird {
 
     // all possible textures for bird
     private static final Texture[] TEXTURES = {
-            new Texture("bird-downflap.png"),
-            new Texture("bird-midflap.png"),
-            new Texture("bird-upflap.png")
+            new Texture("sprites/bird-downflap.png"),
+            new Texture("sprites/bird-midflap.png"),
+            new Texture("sprites/bird-upflap.png")
     };
     private static final int BIRD_WIDTH = TEXTURES[0].getWidth();
     private static final int BIRD_HEIGHT = TEXTURES[0].getHeight();

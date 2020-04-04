@@ -10,16 +10,16 @@ public class ScoreBoard {
 
     private static final int STEP = 1;
     private static final Texture[] numbers = {
-            new Texture("0.png"),
-            new Texture("1.png"),
-            new Texture("2.png"),
-            new Texture("3.png"),
-            new Texture("4.png"),
-            new Texture("5.png"),
-            new Texture("6.png"),
-            new Texture("7.png"),
-            new Texture("8.png"),
-            new Texture("9.png"),
+            new Texture("sprites/0.png"),
+            new Texture("sprites/1.png"),
+            new Texture("sprites/2.png"),
+            new Texture("sprites/3.png"),
+            new Texture("sprites/4.png"),
+            new Texture("sprites/5.png"),
+            new Texture("sprites/6.png"),
+            new Texture("sprites/7.png"),
+            new Texture("sprites/8.png"),
+            new Texture("sprites/9.png"),
     };
 
     private List<Score> scoreList;
