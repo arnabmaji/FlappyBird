@@ -33,23 +33,24 @@ public class FlappyBird extends ApplicationAdapter {
         gameBackgroundImage = new GameBackgroundImage();
 
         scoreBoard = new ScoreBoard();
-        scoreBoard.addScoreListener((score -> {
+        scoreBoard.addScoreListener(score -> {
             if (score == 25) {
                 // change background to night
                 gameBackgroundImage.set(GameBackgroundImage.NIGHT);
             } else if (score == 50) {
                 bird.setColor(Bird.BLUE);
                 gameBackgroundImage.set(GameBackgroundImage.DAY);
+                tube.decreaseCreationDelay(40);
+
             } else if (score == 70) {
                 bird.setColor(Bird.RED);
                 gameBackgroundImage.set(GameBackgroundImage.NIGHT);
-                tube.increaseVelocity();
                 bird.increaseJumpVelocity();
             } else if (score == 99) {
                 // create last tube
                 tube.createLastTube();
             }
-        }));
+        });
 
         gameState = GameState.READY;
     }

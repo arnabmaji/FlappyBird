@@ -49,7 +49,7 @@ public class Bird {
     private float flyingAngle;
 
     public Bird() {
-        this.xPos = Screen.WIDTH / 2.5f;
+        this.xPos = Screen.WIDTH / 5.0f;
         this.activeTexture = TEXTURES[activeColor][birdTextureState];
         this.textureRegion = new TextureRegion(activeTexture, BIRD_WIDTH, BIRD_HEIGHT);
         this.yPos = Screen.HEIGHT / 2.0f;

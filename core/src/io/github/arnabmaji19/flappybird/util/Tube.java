@@ -43,6 +43,7 @@ public class Tube {
         }
         // remove all inactive tubes
         activeTubes.removeAll(inActiveTubes);
+        inActiveTubes.clear();  // clear all inactive tubes
     }
 
     public void createInDelay() {
@@ -134,9 +135,8 @@ public class Tube {
         LOWER_TUBE_TEXTURE.dispose();
     }
 
-    public void increaseVelocity() {
-        velocity -= 2.0f;
-        maxTubeCreationDelay -= 40;
+    public void decreaseCreationDelay(int amount) {
+        maxTubeCreationDelay -= amount;
     }
 
     // inner class for tracking upper and lower tube positions
